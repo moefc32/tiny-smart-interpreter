@@ -1,11 +1,13 @@
 <script>
-	import favicon from '$lib/assets/favicon.svg';
-
-	let { children } = $props();
+    import '../app.css';
+    import { Toasts } from 'svoast';
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+    <title>
+        {import.meta.env.VITE_APP_NAME}
+    </title>
 </svelte:head>
 
-{@render children?.()}
+<slot />
+<Toasts position={'bottom-center'} />

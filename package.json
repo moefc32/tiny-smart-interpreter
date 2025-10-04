@@ -21,6 +21,7 @@
 	},
 	"dependencies": {
 		"@fontsource-variable/plus-jakarta-sans": "^5.2.8",
+		"@google/genai": "^1.22.0",
 		"dotenv": "^16.6.1",
 		"lucide-svelte": "^0.474.0"
 	},
