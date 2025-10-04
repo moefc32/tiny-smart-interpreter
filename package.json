@@ -1,0 +1,33 @@
+{
+	"name": "tiny-smart-interpreter",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-node": "^5.3.3",
+		"@sveltejs/kit": "^2.43.8",
+		"@sveltejs/vite-plugin-svelte": "^6.2.1",
+		"@tailwindcss/vite": "^4.1.14",
+		"svelte": "^5.39.8",
+		"svoast": "^3.0.3",
+		"tailwindcss": "^4.1.14",
+		"vite": "^7.1.9"
+	},
+	"dependencies": {
+		"@fontsource-variable/plus-jakarta-sans": "^5.2.8",
+		"dotenv": "^16.6.1",
+		"lucide-svelte": "^0.474.0"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@tailwindcss/oxide",
+			"esbuild"
+		]
+	}
+}
