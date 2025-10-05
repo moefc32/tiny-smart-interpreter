@@ -19,10 +19,10 @@ export async function POST({ request }) {
 
     try {
         const prompt =
-            'Interpret this file in clear, elaborative description.';
+            'Interpret this file in concise, clear, but elaborative description.';
         const fileBuffer = Buffer.from(await attachment.arrayBuffer());
 
-        const result = await gemini.interpret(prompt, {
+        const result = await gemini.interpret(`${prompt} ${finetune}`, {
             mime: attachment.type,
             data: fileBuffer.toString('base64'),
         });

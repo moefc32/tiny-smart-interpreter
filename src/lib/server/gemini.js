@@ -35,7 +35,7 @@ export default {
                         data: file.data,
                     },
                 }],
-            config: parameters,
+            config: config.get(),
         });
 
         return extractText(response);

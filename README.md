@@ -5,6 +5,12 @@
 
 A monolith application that can interprets various user input using Google Gemini, submitted as part of online training assignments
 
+## Features
+- Chat interaction with an AI assistant using Google Gemini
+- Smart file interpretation (images, documents, audio, etc.) capable of summarizing and analyzing file content
+- Automatic database setup for storing AI chat history and Google Gemini configurations
+- Basic caching of AI assistant chat responses
+
 ## Stack Used
 - [SvelteKit](https://svelte.dev/)
 - [Tailwind](https://tailwindcss.com/)

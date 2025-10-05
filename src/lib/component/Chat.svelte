@@ -1,5 +1,6 @@
 <script>
     import { LoaderCircle, Send } from 'lucide-svelte';
+    import { toast } from 'svoast';
     import datePrettier from '$lib/datePrettier.js';
 
     export let chatHistory;
@@ -7,11 +8,49 @@
     export let chatInput;
     export let chat;
     export let isLoading;
-    export let sendChat;
 
     async function handleKeydown(event) {
         if (event.key === 'Enter' && chat) {
             sendChat();
+        }
+    }
+
+    function addToChatHistory(role, text, timestamp) {
+        chatHistory = [...chatHistory, { role, text, timestamp }];
+    }
+
+    async function sendChat() {
+        if (chat) {
+            isLoading = true;
+
+            const prompt = chat;
+            addToChatHistory('user', prompt, Date.now());
+            chat = '';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        prompt,
+                        timestamp: Date.now(),
+                    }),
+                });
+                if (!response.ok) throw new Error();
+
+                const result = await response.json();
+                addToChatHistory('model', result.data, Date.now());
+            } catch (e) {
+                console.error(e);
+                toast.error('Cannot get proper response, please try again!');
+            }
+
+            isLoading = false;
+            setTimeout(() => {
+                chatInput?.focus();
+            }, 50);
         }
     }
 </script>
@@ -25,12 +64,12 @@
             <div
                 class="flex flex-1 justify-center items-center mx-auto text-gray-600 text-center max-w-[400px]"
             >
-                <span
-                    class="block pt-[120px] px-6 bg-[url(/chat.svg)] bg-no-repeat bg-top bg-[length:120px] opacity-85"
+                <div
+                    class="pt-[110px] px-6 bg-[url(/chat.svg)] bg-no-repeat bg-top bg-[length:100px] w-full opacity-75"
                 >
                     No conversations yet, send a message to begin interacting
                     with your AI assistant
-                </span>
+                </div>
             </div>
         {:else}
             {#each chatHistory as chat, i}
@@ -69,7 +108,7 @@
         <button
             class="btn btn-primary"
             title="Send chat"
-            disabled={isLoading || !chat}
+            disabled={!chat || isLoading}
             on:click={() => sendChat()}
         >
             {#if isLoading}

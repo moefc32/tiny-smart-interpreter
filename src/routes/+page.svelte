@@ -26,44 +26,6 @@
         }
     }
 
-    function addToChatHistory(role, text, timestamp) {
-        chatHistory = [...chatHistory, { role, text, timestamp }];
-    }
-
-    async function sendChat() {
-        if (chat) {
-            isLoading = true;
-
-            const prompt = chat;
-            addToChatHistory('user', prompt, Date.now());
-            chat = '';
-
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        prompt,
-                        timestamp: Date.now(),
-                    }),
-                });
-
-                const result = await response.json();
-                addToChatHistory('model', result.data, Date.now());
-            } catch (e) {
-                console.error(e);
-                toast.error('Cannot get proper response, please try again!');
-            }
-
-            isLoading = false;
-            setTimeout(() => {
-                chatInput?.focus();
-            }, 50);
-        }
-    }
-
     async function clearChatHistory() {
         if (!isLoading) {
             try {
@@ -121,7 +83,7 @@
                 <span class="sm:hidden">Interpret</span>
                 <span class="hidden sm:inline">Interpret File</span>
             </span>
-            <span
+            <!-- <span
                 role="tab"
                 class="tab {activeTab === 2 && 'tab-active'}"
                 tabindex="0"
@@ -129,7 +91,7 @@
             >
                 <Settings size={12} class={'me-1'} />
                 <span>Settings</span>
-            </span>
+            </span> -->
         </div>
         {#if activeTab === 0}
             <button
@@ -150,7 +112,6 @@
             bind:chatInput
             bind:chat
             bind:isLoading
-            {sendChat}
         />
     {:else if activeTab === 1}
         <Interpret />
