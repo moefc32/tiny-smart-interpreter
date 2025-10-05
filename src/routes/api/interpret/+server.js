@@ -1,10 +1,11 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import gemini from '$lib/server/gemini.js';
+import gemini from '$lib/server/gemini';
 import trimText from '$lib/trimText';
 
 export async function POST({ request }) {
     const formData = await request.formData();
+    const finetune = trimText(formData.get('finetune'));
     const attachment = formData.get('attachment');
 
     if (!attachment) {
@@ -18,7 +19,7 @@ export async function POST({ request }) {
 
     try {
         const prompt =
-            'Interpret this file in clear, elaborative description';
+            'Interpret this file in clear, elaborative description.';
         const fileBuffer = Buffer.from(await attachment.arrayBuffer());
 
         const result = await gemini.interpret(prompt, {

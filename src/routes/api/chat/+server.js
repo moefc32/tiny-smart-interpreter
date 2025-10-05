@@ -1,8 +1,18 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import gemini from '$lib/server/gemini.js';
-import model from '$lib/server/model/history.js'
+import crypto from 'crypto';
+import cache from '$lib/server/cache';
+import config from '$lib/server/config';
+import gemini from '$lib/server/gemini';
+import model from '$lib/server/model/history'
 import trimText from '$lib/trimText';
+
+function hashPrompt(prompt) {
+    return crypto
+        .createHash('sha256')
+        .update(prompt.toLowerCase())
+        .digest('hex');
+}
 
 export async function POST({ request }) {
     const {
@@ -20,6 +30,28 @@ export async function POST({ request }) {
     }
 
     try {
+        const key = hashPrompt(prompt);
+        const cached = cache.get(key);
+
+        if (cached) {
+            await model.createData({
+                role: 'user',
+                text: prompt,
+                timestamp,
+            });
+
+            await model.createData({
+                role: 'model',
+                text: cached,
+                timestamp: Date.now(),
+            });
+
+            return json({
+                application: VITE_APP_NAME,
+                data: cached,
+            });
+        }
+
         const chatHistory = await model.getData();
         const formattedHistory = chatHistory.map(({ role, text }) => ({
             role,
@@ -40,9 +72,64 @@ export async function POST({ request }) {
             timestamp: Date.now(),
         });
 
+        if (!formattedHistory.length) {
+            const key = hashPrompt(prompt);
+            cache.set(key, result);
+        }
+
         return json({
             application: VITE_APP_NAME,
             data: result,
+        });
+    } catch (e) {
+        console.error(e);
+
+        return json({
+            application: VITE_APP_NAME,
+            message: e,
+        }, {
+            status: 500,
+        });
+    }
+}
+
+export async function PUT({ request }) {
+    const {
+        systemInstruction,
+        temperature,
+        topP,
+        topK,
+    } = await request.json() || {};
+
+    if (
+        (temperature !== undefined && typeof temperature !== 'number') ||
+        (topP !== undefined && typeof topP !== 'number') ||
+        (topK !== undefined && !Number.isInteger(topK))
+    ) {
+        return json({
+            application: VITE_APP_NAME,
+            message: 'Invalid configuration data, please try again!',
+        }, {
+            status: 400,
+        });
+    }
+
+    try {
+        const result = config.set({
+            systemInstruction: systemInstruction !== undefined
+                ? trimText(systemInstruction)
+                : undefined,
+            temperature,
+            topP,
+            topK,
+        });
+
+        return json({
+            application: VITE_APP_NAME,
+            message: 'AI configurations saved successfully.',
+            data: result,
+        }, {
+            status: 200,
         });
     } catch (e) {
         console.error(e);

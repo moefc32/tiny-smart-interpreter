@@ -1,10 +1,11 @@
 <script>
     import { onMount, tick } from 'svelte';
-    import { MessageSquare, File, X } from 'lucide-svelte';
+    import { MessageSquare, File, X, Settings } from 'lucide-svelte';
     import { toast } from 'svoast';
 
     import Chat from '$lib/component/Chat.svelte';
     import Interpret from '$lib/component/Interpret.svelte';
+    import Configuration from '$lib/component/Configuration.svelte';
 
     export let data;
 
@@ -102,7 +103,7 @@
         <div role="tablist" class="tabs tabs-lift">
             <span
                 role="tab"
-                class="tab {!activeTab && 'tab-active'}"
+                class="tab {activeTab === 0 && 'tab-active'}"
                 tabindex="0"
                 on:click={() => (activeTab = 0)}
             >
@@ -112,7 +113,7 @@
             </span>
             <span
                 role="tab"
-                class="tab {activeTab && 'tab-active'}"
+                class="tab {activeTab === 1 && 'tab-active'}"
                 tabindex="0"
                 on:click={() => (activeTab = 1)}
             >
@@ -120,8 +121,17 @@
                 <span class="sm:hidden">Interpret</span>
                 <span class="hidden sm:inline">Interpret File</span>
             </span>
+            <span
+                role="tab"
+                class="tab {activeTab === 2 && 'tab-active'}"
+                tabindex="0"
+                on:click={() => (activeTab = 2)}
+            >
+                <Settings size={12} class={'me-1'} />
+                <span>Settings</span>
+            </span>
         </div>
-        {#if !activeTab}
+        {#if activeTab === 0}
             <button
                 class="btn btn-sm btn-outline btn-error ms-auto hover:text-white"
                 title="Clear chat history"
@@ -133,7 +143,7 @@
             </button>
         {/if}
     </section>
-    {#if !activeTab}
+    {#if activeTab === 0}
         <Chat
             bind:chatHistory
             bind:chatContainer
@@ -142,7 +152,9 @@
             bind:isLoading
             {sendChat}
         />
-    {:else}
+    {:else if activeTab === 1}
         <Interpret />
+    {:else}
+        <Configuration />
     {/if}
 </main>
