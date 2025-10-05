@@ -1,6 +1,7 @@
 import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import gemini from '$lib/server/gemini';
+import isMimeAllowed from '$lib/isMimeAllowed';
 import trimText from '$lib/trimText';
 
 export async function POST({ request }) {
@@ -12,6 +13,15 @@ export async function POST({ request }) {
         return json({
             application: VITE_APP_NAME,
             message: 'Attachment must be added, please try again!',
+        }, {
+            status: 400,
+        });
+    }
+
+    if (!isMimeAllowed(attachment.type)) {
+        return json({
+            application: VITE_APP_NAME,
+            message: `Unsupported MIME type: ${attachment.type}`,
         }, {
             status: 400,
         });

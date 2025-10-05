@@ -59,9 +59,14 @@
     })();
 </script>
 
+<!-- svelte-ignore a11y_consider_explicit_label -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <main class="flex flex-1 flex-col gap-3 p-6 w-full max-w-xl">
-    <section class="flex gap-3 items-center w-full">
+    <section class="flex gap-2 items-center w-full">
+        <button
+            class="bg-[url(/favicon.svg)] bg-no-repeat bg-contain w-[28px] aspect-square cursor-pointer"
+            on:click={() => (activeTab = 0)}
+        ></button>
         <div role="tablist" class="tabs tabs-lift">
             <span
                 role="tab"
@@ -83,7 +88,7 @@
                 <span class="sm:hidden">Interpret</span>
                 <span class="hidden sm:inline">Interpret File</span>
             </span>
-            <!-- <span
+            <span
                 role="tab"
                 class="tab {activeTab === 2 && 'tab-active'}"
                 tabindex="0"
@@ -91,7 +96,7 @@
             >
                 <Settings size={12} class={'me-1'} />
                 <span>Settings</span>
-            </span> -->
+            </span>
         </div>
         {#if activeTab === 0}
             <button

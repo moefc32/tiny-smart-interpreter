@@ -20,38 +20,37 @@
     }
 
     async function sendChat() {
-        if (chat) {
-            isLoading = true;
+        if (!chat) return;
+        isLoading = true;
 
-            const prompt = chat;
-            addToChatHistory('user', prompt, Date.now());
-            chat = '';
+        const prompt = chat;
+        addToChatHistory('user', prompt, Date.now());
+        chat = '';
 
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        prompt,
-                        timestamp: Date.now(),
-                    }),
-                });
-                if (!response.ok) throw new Error();
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    prompt,
+                    timestamp: Date.now(),
+                }),
+            });
+            if (!response.ok) throw new Error();
 
-                const result = await response.json();
-                addToChatHistory('model', result.data, Date.now());
-            } catch (e) {
-                console.error(e);
-                toast.error('Cannot get proper response, please try again!');
-            }
-
-            isLoading = false;
-            setTimeout(() => {
-                chatInput?.focus();
-            }, 50);
+            const result = await response.json();
+            addToChatHistory('model', result.data, Date.now());
+        } catch (e) {
+            console.error(e);
+            toast.error('Cannot get proper response, please try again!');
         }
+
+        isLoading = false;
+        setTimeout(() => {
+            chatInput?.focus();
+        }, 50);
     }
 </script>
 
@@ -93,6 +92,15 @@
                     </time>
                 </div>
             {/each}
+            {#if isLoading}
+                <div class="chat chat-start">
+                    <div class="chat-header">Thinking...</div>
+                    <div class="chat-bubble chat-bubble-info">
+                        <span class="loading loading-dots loading-xs -mb-2"
+                        ></span>
+                    </div>
+                </div>
+            {/if}
         {/if}
     </div>
     <div class="flex justify-center items-center gap-2">

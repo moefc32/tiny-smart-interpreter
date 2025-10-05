@@ -1,47 +1,85 @@
 <script>
+    import { tick } from 'svelte';
     import { Upload, LoaderCircle, Check } from 'lucide-svelte';
     import { toast } from 'svoast';
+    import isMimeAllowed from '$lib/isMimeAllowed';
 
     let attachment = '';
     let fileInput = '';
     let customInterpret = '';
     let interpretation = '';
     let isLoading = false;
+    let uploadProgress = 0;
+    let isUploading = false;
 
     async function handleFileChange(event) {
         const file = event.target.files[0];
+        if (fileInput) fileInput.value = '';
 
-        if (file) {
-            attachment = file;
-        } else {
-            attachment = null;
-            if (fileInput) fileInput.value = '';
+        if (!file) return;
+
+        if (!isMimeAllowed(file.type)) {
+            return toast.warning('Unsupported file type!');
         }
+
+        attachment = file;
+    }
+
+    async function stopLoading() {
+        isUploading = false;
+        isLoading = false;
+        await tick();
     }
 
     async function interpretFile() {
-        if (attachment) {
-            isLoading = true;
+        if (!attachment) return;
 
-            try {
-                const formData = new FormData();
-                formData.append('finetune', customInterpret);
-                formData.append('attachment', attachment);
+        isLoading = true;
+        uploadProgress = 0;
+        isUploading = true;
 
-                const response = await fetch('/api/interpret', {
-                    method: 'POST',
-                    body: formData,
-                });
-                if (!response.ok) throw new Error();
+        try {
+            const formData = new FormData();
+            formData.append('finetune', customInterpret);
+            formData.append('attachment', attachment);
 
-                const result = await response.json();
-                interpretation = result.data;
-            } catch (e) {
-                console.error(e);
-                toast.error('Cannot get proper response, please try again!');
-            }
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/interpret');
 
-            isLoading = false;
+            xhr.upload.onprogress = async event => {
+                if (event.lengthComputable) {
+                    uploadProgress = Math.round(
+                        (event.loaded / event.total) * 100,
+                    );
+
+                    await tick();
+                }
+            };
+
+            xhr.onload = async () => {
+                if (xhr.status === 200) {
+                    const result = JSON.parse(xhr.responseText);
+                    interpretation = result.data;
+                } else {
+                    toast.error(
+                        'Cannot get proper response, please try again!',
+                    );
+                }
+
+                await stopLoading();
+            };
+
+            xhr.onerror = async () => {
+                await stopLoading();
+                toast.error('Network error occurred, please try again!');
+            };
+
+            xhr.send(formData);
+        } catch (e) {
+            await stopLoading();
+
+            console.error(e);
+            toast.error('Cannot get proper response, please try again!');
         }
     }
 
@@ -62,11 +100,11 @@
                 <div class="flex justify-center items-center">
                     <span class="flex-1 font-bold">Interpretation for :</span>
                     <span class="hidden sm:inline badge badge-success">
-                        {attachment.type}
+                        {attachment?.type}
                     </span>
                 </div>
-                <div class="text-sm truncate" title={attachment.name}>
-                    {attachment.name}
+                <div class="text-sm truncate" title={attachment?.name}>
+                    {attachment?.name}
                 </div>
             </div>
             {@html interpretation}
@@ -99,13 +137,26 @@
                     class="mt-[95px] pt-[110px] px-6 bg-[length:100px]! w-full opacity-75"
                     style={`background: ${attachment ? 'url(/file.svg)' : 'url(/upload.svg)'} center top no-repeat;`}
                 >
-                    <span class="block pb-6 truncate">
+                    <span class="block pb-6 truncate" title={attachment?.name}>
                         {#if attachment}
-                            {attachment.name}
+                            {attachment?.name}
                         {:else}
                             No file selected
                         {/if}
                     </span>
+                </div>
+                <div
+                    class="{isUploading
+                        ? 'flex'
+                        : 'hidden'} items-center gap-3 px-4 py-6 w-full absolute bottom-0"
+                >
+                    <span class="text-sm">Uploading</span>
+                    <progress
+                        class="progress progress-info w-full h-3"
+                        value={uploadProgress}
+                        min="0"
+                        max="100"
+                    ></progress>
                 </div>
             </div>
         </label>
@@ -123,7 +174,7 @@
             on:click={() => interpretFile()}
         >
             {#if isLoading}
-                <LoaderCircle size={14} class={'spin'} /> Loading...
+                <LoaderCircle size={14} class={'spin'} /> Processing File...
             {:else}
                 <Check size={14} /> Process File
             {/if}
