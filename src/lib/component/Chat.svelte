@@ -1,5 +1,5 @@
 <script>
-    import { LoaderCircle, Send } from 'lucide-svelte';
+    import { LoaderCircle, Send, Menu, X } from 'lucide-svelte';
     import { toast } from 'svoast';
     import datePrettier from '$lib/datePrettier.js';
 
@@ -52,11 +52,30 @@
             chatInput?.focus();
         }, 50);
     }
+
+    async function clearChatHistory() {
+        if (!isLoading) {
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                chatHistory = [];
+            } catch (e) {
+                console.error(e);
+                toast.error('Cannot clear chat history, please try again!');
+            }
+        }
+    }
 </script>
 
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <section class="flex flex-1 flex-col justify-between">
     <div
-        class="card p-3 bg-gray-50 h-[calc(100vh-150px)] border-[1px] border-gray-200 overflow-y-auto"
+        class="card p-3 bg-gray-50 h-[calc(100vh-150px)] border-[1px] border-gray-200 overflow-y-auto shadow"
         bind:this={chatContainer}
     >
         {#if !chatHistory.length}
@@ -106,7 +125,7 @@
     <div class="flex justify-center items-center gap-2">
         <input
             type="text"
-            class="input w-full"
+            class="input w-full shadow"
             placeholder="Type message here..."
             disabled={isLoading}
             bind:this={chatInput}
@@ -114,7 +133,7 @@
             on:keydown={handleKeydown}
         />
         <button
-            class="btn btn-primary"
+            class="btn btn-primary shadow"
             title="Send chat"
             disabled={!chat || isLoading}
             on:click={() => sendChat()}
@@ -125,5 +144,30 @@
                 <Send size={14} /> Send
             {/if}
         </button>
+        <div class="dropdown dropdown-top dropdown-end">
+            <button
+                class="px-0 cursor-pointer"
+                title="View more action"
+                tabindex="0"
+            >
+                <Menu size={24} />
+            </button>
+            <ul
+                tabindex="0"
+                class="dropdown-content menu bg-base-100 rounded-box w-48 p-0 bottom-[55px]! right-[10px]! z-1 shadow"
+            >
+                <li>
+                    <button
+                        class="btn btn-error {!chatHistory.length ||
+                            isLoading ||
+                            'text-white'}"
+                        disabled={!chatHistory.length || isLoading}
+                        on:click={() => clearChatHistory()}
+                    >
+                        <X size={14} /> Clear Chat History
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
 </section>

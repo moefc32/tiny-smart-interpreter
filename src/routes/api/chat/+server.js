@@ -30,13 +30,13 @@ export async function POST({ request }) {
     }
 
     try {
-        const key = hashPrompt(prompt);
+        const key = hashPrompt(trimText(prompt));
         const cached = cache.get(key);
 
         if (cached) {
             await model.createData({
                 role: 'user',
-                text: prompt,
+                text: trimText(prompt),
                 timestamp,
             });
 
@@ -94,12 +94,16 @@ export async function POST({ request }) {
 }
 
 export async function PUT({ request }) {
-    const {
+    let {
         systemInstruction,
         temperature,
         topP,
         topK,
     } = await request.json() || {};
+
+    if (temperature !== undefined) temperature = Number(temperature);
+    if (topP !== undefined) topP = Number(topP);
+    if (topK !== undefined) topK = Number(topK);
 
     if (
         (temperature !== undefined && typeof temperature !== 'number') ||

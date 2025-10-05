@@ -12,7 +12,7 @@
     let uploadProgress = 0;
     let isUploading = false;
 
-    async function handleFileChange(event) {
+    function handleFileChange(event) {
         const file = event.target.files[0];
         if (fileInput) fileInput.value = '';
 
@@ -94,7 +94,7 @@
 <section class="flex flex-1 flex-col justify-between gap-3">
     {#if interpretation}
         <div
-            class="card flex-1 p-3 bg-gray-50 max-h-[calc(100vh-155px)] border-[1px] border-gray-200 overflow-y-auto"
+            class="card flex-1 p-3 bg-gray-50 max-h-[calc(100vh-155px)] border-[1px] border-gray-200 overflow-y-auto shadow"
         >
             <div class="flex flex-col gap-2 mb-4">
                 <div class="flex justify-center items-center">
@@ -110,7 +110,7 @@
             {@html interpretation}
         </div>
         <button
-            class="btn btn-accent"
+            class="btn btn-accent shadow"
             title="Interpret new file"
             on:click={() => reset()}
         >
@@ -120,7 +120,7 @@
         <label
             for="attachment"
             class="{isLoading ||
-                'cursor-pointer'} card flex flex-1 justify-center items-center p-3 bg-gray-50 border-[1px] border-gray-200 overflow-y-auto"
+                'cursor-pointer'} card flex flex-1 justify-center items-center p-3 bg-gray-50 border-[1px] border-gray-200 overflow-y-auto shadow"
         >
             <input
                 type="file"
@@ -161,14 +161,14 @@
             </div>
         </label>
         <textarea
-            class="textarea w-full resize-none"
+            class="textarea w-full resize-none shadow"
             rows="3"
             placeholder="Add a custom interpretation format (optional)"
             disabled={isLoading}
             bind:value={customInterpret}
         ></textarea>
         <button
-            class="btn btn-primary"
+            class="btn btn-primary shadow"
             title="Process file to be interpreted"
             disabled={!attachment || isLoading}
             on:click={() => interpretFile()}

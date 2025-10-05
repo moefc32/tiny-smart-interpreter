@@ -1,5 +1,7 @@
 <script>
     import { onMount, tick } from 'svelte';
+    import { goto } from '$app/navigation';
+    import { page } from '$app/stores';
     import { MessageSquare, File, X, Settings } from 'lucide-svelte';
     import { toast } from 'svoast';
 
@@ -9,11 +11,10 @@
 
     export let data;
 
-    let { chatHistory } = data;
+    let { activeTab, config, chatHistory } = data;
 
     let chatContainer;
     let chatInput;
-    let activeTab = 0;
     let chat = '';
     let isLoading = false;
 
@@ -26,22 +27,26 @@
         }
     }
 
-    async function clearChatHistory() {
-        if (!isLoading) {
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+    function tabNavigate(tab) {
+        const url = new URL(window.location.href);
+        activeTab = tab;
 
-                chatHistory = [];
-            } catch (e) {
-                console.error(e);
-                toast.error('Cannot clear chat history, please try again!');
-            }
+        switch (tab) {
+            case 0:
+                url.search = '';
+                break;
+            case 1:
+                url.search = '?interpret';
+                break;
+            case 2:
+                url.search = '?settings';
+                break;
         }
+
+        goto(url.pathname + url.search, {
+            replaceState: true,
+            noScroll: true,
+        });
     }
 
     onMount(() => {
@@ -54,7 +59,10 @@
     $: (async () => {
         if (activeTab === 0 && chatHistory.length) {
             await tick();
-            scrollToBottom();
+
+            setTimeout(() => {
+                scrollToBottom();
+            }, 50);
         }
     })();
 </script>
@@ -65,14 +73,14 @@
     <section class="flex gap-2 items-center w-full">
         <button
             class="bg-[url(/favicon.svg)] bg-no-repeat bg-contain w-[28px] aspect-square cursor-pointer"
-            on:click={() => (activeTab = 0)}
+            on:click={() => tabNavigate(0)}
         ></button>
         <div role="tablist" class="tabs tabs-lift">
             <span
                 role="tab"
                 class="tab {activeTab === 0 && 'tab-active'}"
                 tabindex="0"
-                on:click={() => (activeTab = 0)}
+                on:click={() => tabNavigate(0)}
             >
                 <MessageSquare size={12} class={'me-1'} />
                 <span class="sm:hidden">Chat</span>
@@ -82,7 +90,7 @@
                 role="tab"
                 class="tab {activeTab === 1 && 'tab-active'}"
                 tabindex="0"
-                on:click={() => (activeTab = 1)}
+                on:click={() => tabNavigate(1)}
             >
                 <File size={12} class={'me-1'} />
                 <span class="sm:hidden">Interpret</span>
@@ -92,23 +100,12 @@
                 role="tab"
                 class="tab {activeTab === 2 && 'tab-active'}"
                 tabindex="0"
-                on:click={() => (activeTab = 2)}
+                on:click={() => tabNavigate(2)}
             >
                 <Settings size={12} class={'me-1'} />
                 <span>Settings</span>
             </span>
         </div>
-        {#if activeTab === 0}
-            <button
-                class="btn btn-sm btn-outline btn-error ms-auto hover:text-white"
-                title="Clear chat history"
-                disabled={!chatHistory.length || isLoading}
-                on:click={() => clearChatHistory()}
-            >
-                <X size={12} />
-                <span class="hidden sm:inline">Clear</span>
-            </button>
-        {/if}
     </section>
     {#if activeTab === 0}
         <Chat
@@ -121,6 +118,6 @@
     {:else if activeTab === 1}
         <Interpret />
     {:else}
-        <Configuration />
+        <Configuration bind:config />
     {/if}
 </main>

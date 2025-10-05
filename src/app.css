@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+
 @plugin 'daisyui' {
     exclude: rootscrollgutter;
 }
@@ -24,6 +25,15 @@ input[type="search"]::-webkit-search-cancel-button {
 
 body {
     font-family: 'Plus Jakarta Sans Variable', sans-serif;
+}
+
+.important {
+    display: inline-block;
+}
+
+.important::after {
+    content: '*';
+    color: var(--color-red-500);
 }
 
 .spin {
