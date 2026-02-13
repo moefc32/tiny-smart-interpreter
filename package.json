@@ -10,28 +10,29 @@
 		"prepare": "svelte-kit sync || echo ''"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-node": "^5.3.3",
-		"@sveltejs/kit": "^2.43.8",
-		"@sveltejs/vite-plugin-svelte": "^6.2.1",
-		"@tailwindcss/vite": "^4.1.14",
-		"daisyui": "^5.1.27",
-		"svelte": "^5.39.8",
+		"@sveltejs/adapter-node": "^5.5.3",
+		"@sveltejs/kit": "^2.51.0",
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@tailwindcss/vite": "^4.1.18",
+		"daisyui": "^5.5.18",
+		"svelte": "^5.50.3",
 		"svoast": "^3.0.3",
-		"tailwindcss": "^4.1.14",
-		"vite": "^7.1.9"
+		"tailwindcss": "^4.1.18",
+		"vite": "^7.3.1"
 	},
 	"dependencies": {
 		"@fontsource-variable/plus-jakarta-sans": "^5.2.8",
-		"@google/genai": "^1.22.0",
-		"better-sqlite3": "^12.4.1",
+		"@google/genai": "^1.41.0",
+		"better-sqlite3": "^12.6.2",
 		"dotenv": "^16.6.1",
-		"lucide-svelte": "^0.474.0"
+		"lucide-svelte": "^0.563.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"@tailwindcss/oxide",
 			"better-sqlite3",
-			"esbuild"
+			"esbuild",
+			"protobufjs"
 		]
 	}
 }
