@@ -1,17 +1,18 @@
-import sqlite from '../sqlite';
-import { TABLE_HISTORY } from './tables';
+import { asc } from 'drizzle-orm';
+import { db } from '../drizzle';
+import { history } from '../schema';
 
 export default {
     getData: async () => {
         try {
-            const result = sqlite(`
-                SELECT
-                    role,
-                    text,
-                    timestamp
-                FROM ${TABLE_HISTORY}
-                ORDER BY timestamp ASC;
-            `);
+            const result = await db
+                .select({
+                    role: history.role,
+                    text: history.text,
+                    timestamp: history.timestamp,
+                })
+                .from(history)
+                .orderBy(asc(history.timestamp));
 
             return result;
         } catch (e) {
@@ -21,17 +22,14 @@ export default {
     },
     createData: async (data) => {
         try {
-            const result = sqlite(`
-                INSERT INTO ${TABLE_HISTORY} (
-                    role,
-                    text,
-                    timestamp
-                ) VALUES (?, ?, ?);
-            `, [
-                data.role,
-                data.text,
-                data.timestamp
-            ]);
+            const result = await db
+                .insert(history)
+                .values({
+                    role: data.role,
+                    text: data.text,
+                    timestamp: data.timestamp,
+                })
+                .returning();
 
             return {
                 column: {
@@ -48,10 +46,7 @@ export default {
     },
     deleteData: async () => {
         try {
-            const result = sqlite(`
-                DELETE FROM ${TABLE_HISTORY};
-            `);
-
+            const result = await db.delete(history);
             return result;
         } catch (e) {
             console.error(e);

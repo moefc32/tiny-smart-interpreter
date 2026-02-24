@@ -25,6 +25,7 @@
 		"@google/genai": "^1.42.0",
 		"better-sqlite3": "^12.6.2",
 		"dotenv": "^16.6.1",
+		"drizzle-orm": "^0.45.1",
 		"lucide-svelte": "^0.563.0"
 	},
 	"pnpm": {

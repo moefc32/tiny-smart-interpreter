@@ -2,9 +2,9 @@ import { VITE_APP_NAME } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import crypto from 'crypto';
 import cache from '$lib/server/cache';
-import config from '$lib/server/config';
+import modelConfig from '$lib/server/db/model/config';
+import modelHistory from '$lib/server/db/model/history'
 import gemini from '$lib/server/gemini';
-import model from '$lib/server/model/history'
 import trimText from '$lib/trimText';
 
 function hashPrompt(prompt) {
@@ -34,13 +34,13 @@ export async function POST({ request }) {
         const cached = cache.get(key);
 
         if (cached) {
-            await model.createData({
+            await modelHistory.createData({
                 role: 'user',
                 text: trimText(prompt),
                 timestamp,
             });
 
-            await model.createData({
+            await modelHistory.createData({
                 role: 'model',
                 text: cached,
                 timestamp: Date.now(),
@@ -52,7 +52,7 @@ export async function POST({ request }) {
             });
         }
 
-        const chatHistory = await model.getData();
+        const chatHistory = await modelHistory.getData();
         const formattedHistory = chatHistory.map(({ role, text }) => ({
             role,
             parts: [{ text }],
@@ -60,13 +60,13 @@ export async function POST({ request }) {
 
         const result = await gemini.chat(prompt, formattedHistory);
 
-        await model.createData({
+        await modelHistory.createData({
             role: 'user',
             text: prompt,
             timestamp,
         });
 
-        await model.createData({
+        await modelHistory.createData({
             role: 'model',
             text: result,
             timestamp: Date.now(),
@@ -119,7 +119,7 @@ export async function PUT({ request }) {
     }
 
     try {
-        const result = config.set({
+        const result = await modelConfig.set({
             systemInstruction: systemInstruction !== undefined
                 ? trimText(systemInstruction)
                 : undefined,
@@ -149,7 +149,7 @@ export async function PUT({ request }) {
 
 export async function DELETE() {
     try {
-        await model.deleteData();
+        await modelHistory.deleteData();
 
         return json({
             application: VITE_APP_NAME,

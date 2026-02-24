@@ -3,7 +3,7 @@ import {
     VITE_GEMINI_MODEL
 } from '$env/static/private';
 import { GoogleGenAI } from '@google/genai';
-import config from './config';
+import config from './db/model/config';
 import extractText from '$lib/extractText';
 
 const genAI = new GoogleGenAI({

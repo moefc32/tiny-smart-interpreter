@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
-import config from '$lib/server/config';
-import model from '$lib/server/model/history'
+import modelConfig from '$lib/server/db/model/config';
+import modelHistory from '$lib/server/db/model/history'
 
 export async function load({ url }) {
     const searchParams = url.searchParams;
@@ -15,11 +15,11 @@ export async function load({ url }) {
         throw redirect(307, url.pathname);
     }
 
-    const chatHistory = await model.getData();
+    const chatHistory = await modelHistory.getData();
 
     return {
         activeTab: hasSettings ? 2 : hasInterpret ? 1 : 0,
-        config: config.get(),
+        config: await modelConfig.get(),
         chatHistory,
     };
 }

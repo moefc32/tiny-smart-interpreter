@@ -90,6 +90,7 @@
 
             const result = await response.json();
             config = result.data;
+
             toast.success('Configuration saved successfully.');
         } catch (e) {
             console.error(e);

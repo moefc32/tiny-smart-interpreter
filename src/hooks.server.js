@@ -1,4 +1,4 @@
-import setSchema from '$lib/server/schema';
+import setSchema from '$lib/server/db/init';
 
 setSchema();
 
