@@ -49,12 +49,12 @@
         const value = event.target.value;
 
         if (value === '') {
-            newConfig.topP = config.topP;
+            newConfig.top_p = config.top_p;
         } else {
             let num = parseFloat(value);
             if (num < 0) num = 0;
             if (num > 1) num = 1;
-            newConfig.topP = parseFloat(num.toFixed(1));
+            newConfig.top_p = parseFloat(num.toFixed(1));
         }
     }
 
@@ -62,17 +62,17 @@
         const value = event.target.value;
 
         if (value === '') {
-            newConfig.topK = config.topK;
+            newConfig.top_k = config.top_k;
         } else {
             let num = parseFloat(value);
             if (num < 1) num = 1;
             if (num > 100) num = 100;
-            newConfig.topK = parseInt(num);
+            newConfig.top_k = parseInt(num);
         }
     }
 
     async function saveConfig() {
-        if (!newConfig.temperature || !newConfig.topP || !newConfig.topK) {
+        if (!newConfig.temperature || !newConfig.top_p || !newConfig.top_k) {
             return;
         }
 
@@ -125,7 +125,7 @@
                 rows="3"
                 placeholder="Add an AI system instruction (optional)"
                 disabled={isLoading}
-                bind:value={newConfig.systemInstruction}
+                bind:value={newConfig.system_instruction}
             ></textarea>
         </fieldset>
         <fieldset class="fieldset">
@@ -155,7 +155,7 @@
                     disabled={isLoading}
                     on:input={sanitizeRealInput}
                     on:blur={formatTopP}
-                    bind:value={newConfig.topP}
+                    bind:value={newConfig.top_p}
                 />
                 <p class="label min-w-[250px]">Allowed range: 0.0-1.0</p>
             </div>
@@ -171,7 +171,7 @@
                     disabled={isLoading}
                     on:input={sanitizeIntegerInput}
                     on:blur={formatTopK}
-                    bind:value={newConfig.topK}
+                    bind:value={newConfig.top_k}
                 />
                 <p class="label min-w-[250px]">Allowed range: 1-100</p>
             </div>
@@ -179,14 +179,14 @@
     </div>
     <button
         class="btn btn-primary shadow"
-        disabled={(config.systemInstruction ==
-            trimText(newConfig.systemInstruction) &&
+        disabled={(config.system_instruction ==
+            trimText(newConfig.system_instruction) &&
             config.temperature == newConfig.temperature &&
-            config.topP == newConfig.topP &&
-            config.topK == newConfig.topK) ||
+            config.top_p == newConfig.top_p &&
+            config.top_k == newConfig.top_k) ||
             !newConfig.temperature ||
-            !newConfig.topP ||
-            !newConfig.topK ||
+            !newConfig.top_p ||
+            !newConfig.top_k ||
             isLoading}
         on:click={() => saveConfig()}
     >

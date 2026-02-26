@@ -14,15 +14,15 @@ export default async function setSchema() {
     await db.run(sql`
         CREATE TABLE IF NOT EXISTS config (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            systemInstruction TEXT,
+            system_instruction TEXT,
             temperature REAL NOT NULL,
-            topP REAL NOT NULL,
-            topK INTEGER NOT NULL
+            top_p REAL NOT NULL,
+            top_k INTEGER NOT NULL
         )
     `);
 
     await db.run(sql`
-        INSERT INTO config (systemInstruction, temperature, topP, topK)
+        INSERT INTO config (system_instruction, temperature, top_p, top_k)
         SELECT
             'You are a personal AI assistant. Always respond in plain text only. Do not use markdown, lists, asterisks, or any other formatting symbols.',
             0.5,

@@ -13,8 +13,8 @@ export const history = sqliteTable('history', {
 
 export const config = sqliteTable('config', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
-	systemInstruction: text('systemInstruction'),
+	system_instruction: text('system_instruction'),
 	temperature: real('temperature').notNull(),
-	topP: real('topP').notNull(),
-	topK: integer('topK').notNull(),
+	top_p: real('top_p').notNull(),
+	top_k: integer('top_k').notNull(),
 });
