@@ -107,7 +107,10 @@
                         {chat.text}
                     </div>
                     <time class="chat-footer opacity-75">
-                        {datePrettier(chat.timestamp)}
+                        {datePrettier(chat.timestamp, {
+                            date: 'short',
+                            time: 'short',
+                        })}
                     </time>
                 </div>
             {/each}
@@ -115,8 +118,8 @@
                 <div class="chat chat-start">
                     <div class="chat-header">Thinking...</div>
                     <div class="chat-bubble chat-bubble-info">
-                        <span class="loading loading-dots loading-xs -mb-2"
-                        ></span>
+                        <span class="loading loading-dots loading-xs -mb-2">
+                        </span>
                     </div>
                 </div>
             {/if}
