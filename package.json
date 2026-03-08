@@ -15,17 +15,18 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@tailwindcss/vite": "^4.2.1",
 		"daisyui": "^5.5.19",
-		"svelte": "^5.53.6",
+		"svelte": "^5.53.7",
 		"svoast": "^3.0.3",
 		"tailwindcss": "^4.2.1",
 		"vite": "^7.3.1"
 	},
 	"dependencies": {
 		"@fontsource-variable/plus-jakarta-sans": "^5.2.8",
-		"@google/genai": "^1.43.0",
+		"@google/genai": "^1.44.0",
 		"better-sqlite3": "^12.6.2",
 		"dotenv": "^16.6.1",
 		"drizzle-orm": "^0.45.1",
+		"ky": "^1.14.3",
 		"lucide-svelte": "^0.563.0"
 	},
 	"pnpm": {

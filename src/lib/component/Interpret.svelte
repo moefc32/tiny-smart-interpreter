@@ -2,6 +2,7 @@
     import { tick } from 'svelte';
     import { Upload, LoaderCircle, Check } from 'lucide-svelte';
     import { toast } from 'svoast';
+    import ky from 'ky';
     import isMimeAllowed from '$lib/isMimeAllowed';
 
     let attachment = '';
@@ -9,8 +10,6 @@
     let customInterpret = '';
     let interpretation = '';
     let isLoading = false;
-    let uploadProgress = 0;
-    let isUploading = false;
 
     function handleFileChange(event) {
         const file = event.target.files[0];
@@ -25,58 +24,26 @@
         attachment = file;
     }
 
-    async function stopLoading() {
-        isUploading = false;
-        isLoading = false;
-        await tick();
-    }
-
     async function interpretFile() {
         if (!attachment) return;
 
         isLoading = true;
-        uploadProgress = 0;
-        isUploading = true;
 
         try {
             const formData = new FormData();
             formData.append('finetune', customInterpret);
             formData.append('attachment', attachment);
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/interpret');
+            const result = await ky
+                .post('/api/interpret', {
+                    body: formData,
+                    timeout: 60 * 1000,
+                })
+                .json();
 
-            xhr.upload.onprogress = async event => {
-                if (event.lengthComputable) {
-                    uploadProgress = Math.round(
-                        (event.loaded / event.total) * 100,
-                    );
-
-                    await tick();
-                }
-            };
-
-            xhr.onload = async () => {
-                if (xhr.status === 200) {
-                    const result = JSON.parse(xhr.responseText);
-                    interpretation = result.data;
-                } else {
-                    toast.error(
-                        'Cannot get proper response, please try again!',
-                    );
-                }
-
-                await stopLoading();
-            };
-
-            xhr.onerror = async () => {
-                await stopLoading();
-                toast.error('Network error occurred, please try again!');
-            };
-
-            xhr.send(formData);
+            interpretation = result.data;
         } catch (e) {
-            await stopLoading();
+            isLoading = false;
 
             console.error(e);
             toast.error('Cannot get proper response, please try again!');
@@ -84,6 +51,7 @@
     }
 
     function reset() {
+        isLoading = false;
         attachment = null;
         interpretation = null;
         customInterpret = '';
@@ -94,7 +62,7 @@
 <section class="flex flex-1 flex-col justify-between gap-3">
     {#if interpretation}
         <div
-            class="card flex-1 p-3 bg-gray-50 max-h-[calc(100vh-155px)] border-[1px] border-gray-200 overflow-y-auto shadow"
+            class="card flex-1 p-3 bg-gray-50 max-h-[calc(100vh-155px)] border-1 border-gray-200 overflow-y-auto shadow"
         >
             <div class="flex flex-col gap-2 mb-4">
                 <div class="flex justify-center items-center">
@@ -120,7 +88,7 @@
         <label
             for="attachment"
             class="{isLoading ||
-                'cursor-pointer'} card flex flex-1 justify-center items-center p-3 bg-gray-50 border-[1px] border-gray-200 overflow-y-auto shadow"
+                'cursor-pointer'} card flex flex-1 justify-center items-center p-3 bg-gray-50 border-1 border-gray-200 overflow-y-auto shadow"
         >
             <input
                 type="file"
@@ -146,16 +114,12 @@
                     </span>
                 </div>
                 <div
-                    class="{isUploading
+                    class="{isLoading
                         ? 'flex'
                         : 'hidden'} items-center gap-3 px-4 py-6 w-full absolute bottom-0"
                 >
                     <span class="text-sm">Uploading</span>
-                    <progress
-                        class="progress progress-info w-full h-3"
-                        value={uploadProgress}
-                        min="0"
-                        max="100"
+                    <progress class="progress progress-info w-full h-3"
                     ></progress>
                 </div>
             </div>

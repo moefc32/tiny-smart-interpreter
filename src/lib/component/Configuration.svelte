@@ -1,6 +1,7 @@
 <script>
     import { LoaderCircle, Check } from 'lucide-svelte';
     import { toast } from 'svoast';
+    import ky from 'ky';
     import trimText from '$lib/trimText';
 
     export let config;
@@ -79,18 +80,13 @@
         isLoading = true;
 
         try {
-            const response = await fetch('/api/chat', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newConfig),
-            });
-            if (!response.ok) throw new Error();
+            const result = await ky
+                .put('/api/chat', {
+                    json: newConfig,
+                })
+                .json();
 
-            const result = await response.json();
             config = result.data;
-
             toast.success('Configuration saved successfully.');
         } catch (e) {
             console.error(e);
@@ -103,9 +99,9 @@
 
 <section class="flex flex-1 flex-col justify-between">
     <div
-        class="card p-3 bg-gray-50 h-[calc(100vh-150px)] border-[1px] border-gray-200 overflow-y-auto shadow"
+        class="card p-3 bg-gray-50 h-[calc(100vh-150px)] border-1 border-gray-200 overflow-y-auto shadow"
     >
-        <div class="card p-6 bg-white border-[1px] border-gray-200 w-full">
+        <div class="card p-6 bg-white border-1 border-gray-200 w-full">
             <div
                 class="flex flex-col items-center gap-1 pt-[110px] px-6 bg-[url(/favicon.svg)] bg-no-repeat bg-top bg-[length:100px] w-full opacity-75"
             >

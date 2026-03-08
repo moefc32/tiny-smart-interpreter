@@ -1,6 +1,7 @@
 <script>
     import { LoaderCircle, Send, Menu, X } from 'lucide-svelte';
     import { toast } from 'svoast';
+    import ky from 'ky';
     import datePrettier from '$lib/datePrettier.js';
 
     export let chatHistory;
@@ -28,19 +29,16 @@
         chat = '';
 
         try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    prompt,
-                    timestamp: Date.now(),
-                }),
-            });
-            if (!response.ok) throw new Error();
+            const result = await ky
+                .post('/api/chat', {
+                    json: {
+                        prompt,
+                        timestamp: Date.now(),
+                    },
+                    timeout: 60 * 1000,
+                })
+                .json();
 
-            const result = await response.json();
             addToChatHistory('model', result.data, Date.now());
         } catch (e) {
             console.error(e);
@@ -56,13 +54,7 @@
     async function clearChatHistory() {
         if (!isLoading) {
             try {
-                const response = await fetch('/api/chat', {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
+                await ky.delete('/api/chat');
                 chatHistory = [];
             } catch (e) {
                 console.error(e);
@@ -75,7 +67,7 @@
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <section class="flex flex-1 flex-col justify-between">
     <div
-        class="card p-3 bg-gray-50 h-[calc(100vh-150px)] border-[1px] border-gray-200 overflow-y-auto shadow"
+        class="card p-3 bg-gray-50 h-[calc(100vh-150px)] border-1 border-gray-200 overflow-y-auto shadow"
         bind:this={chatContainer}
     >
         {#if !chatHistory.length}
