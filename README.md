@@ -1,9 +1,16 @@
+<div align="center">
+<img src="./static/favicon.svg" width="80"/>
+
 # Tiny Smart Interpreter
+
+**A monolith application that can interprets various user input using Google Gemini**
+
 <a href="https://opensource.org/license/mit"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" height="24" /></a>
 <a href="https://pnpm.io/"><img src="https://img.shields.io/badge/Package-PNPM-orange?style=flat-square" height="24" /></a>
 <img src="https://img.shields.io/badge/Module-ECMAScript-yellow?style=flat-square" height="24" />
+</div>
 
-A monolith application that can interprets various user input using Google Gemini, submitted as part of online training assignments
+![Preview](https://github.com/user-attachments/assets/6c888094-cce8-483d-8932-10918a2ee71e)
 
 ## Features
 - Chat interaction with an AI assistant using Google Gemini
@@ -12,11 +19,10 @@ A monolith application that can interprets various user input using Google Gemin
 - Basic caching of AI assistant chat responses
 
 ## Stack Used
-- [SvelteKit](https://svelte.dev/)
-- [Tailwind](https://tailwindcss.com/)
-- [daisyUI](https://daisyui.com/)
+- Monolithic [SvelteKit](https://svelte.dev/)
+- [Tailwind](https://tailwindcss.com/) with [daisyUI](https://daisyui.com/)
+- [SQLite](https://www.sqlite.org/) with [Drizzle ORM](https://orm.drizzle.team/)
 - [Google Gemini](https://gemini.google.com/)
-- [SQLite](https://www.sqlite.org/)
 
 ## Local Preview
 1. Clone this repository to your local computer
