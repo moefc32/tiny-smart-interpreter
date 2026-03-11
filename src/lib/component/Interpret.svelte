@@ -1,6 +1,6 @@
 <script>
     import { tick } from 'svelte';
-    import { Upload, LoaderCircle, Check } from 'lucide-svelte';
+    import { Upload, Check } from 'lucide-svelte';
     import { toast } from 'svoast';
     import ky from 'ky';
     import isMimeAllowed from '$lib/isMimeAllowed';
@@ -138,7 +138,7 @@
             on:click={() => interpretFile()}
         >
             {#if isLoading}
-                <LoaderCircle size={14} class={'spin'} /> Processing File...
+                <span class="loading loading-spinner loading-xs"></span> Loading...
             {:else}
                 <Check size={14} /> Process File
             {/if}

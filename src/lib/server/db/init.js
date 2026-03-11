@@ -1,6 +1,17 @@
 import { sql } from 'drizzle-orm';
 import { db } from '../db/drizzle';
 
+function dedent(str) {
+    const lines = str.replace(/^\n/, '').split('\n');
+    const indent = Math.min(
+        ...lines
+            .filter(line => line.trim())
+            .map(line => line.match(/^(\s*)/)[0].length)
+    );
+
+    return lines.map(line => line.slice(indent)).join('\n').trim();
+}
+
 export default async function setSchema() {
     await db.run(sql`
         CREATE TABLE IF NOT EXISTS history (
@@ -24,7 +35,16 @@ export default async function setSchema() {
     await db.run(sql`
         INSERT INTO config (system_instruction, temperature, top_p, top_k)
         SELECT
-            'You are a personal AI assistant. Always respond in plain text only. Do not use markdown, lists, asterisks, or any other formatting symbols.',
+            ${dedent(`
+                You are a personal AI assistant.
+
+                Formatting rules:
+                - Output must be plain text.
+                - Only the following Markdown elements are permitted: paragraphs, line breaks, bullet lists (-), numbered lists (1.), *italic*, and **bold**.
+                - Tables, horizontal rules, and Headings are strictly forbidden.
+                - Blockquotes, code blocks, HTML, links, and images are forbidden.
+                - If a comparison is required, present it using bullet lists instead of tables.
+            `)},
             0.5,
             0.8,
             40

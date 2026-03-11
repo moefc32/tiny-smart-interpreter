@@ -1,5 +1,5 @@
 <script>
-    import { LoaderCircle, Check } from 'lucide-svelte';
+    import { Check } from 'lucide-svelte';
     import { toast } from 'svoast';
     import ky from 'ky';
     import trimText from '$lib/trimText';
@@ -73,16 +73,17 @@
     }
 
     async function saveConfig() {
-        if (!newConfig.temperature || !newConfig.top_p || !newConfig.top_k) {
-            return;
-        }
-
+        if (!newConfig.top_k) return;
         isLoading = true;
 
         try {
             const result = await ky
                 .put('/api/chat', {
-                    json: newConfig,
+                    json: {
+                        ...newConfig,
+                        temperature: newConfig.temperature || 0,
+                        top_p: newConfig.top_p || 0,
+                    },
                 })
                 .json();
 
@@ -180,14 +181,12 @@
             config.temperature == newConfig.temperature &&
             config.top_p == newConfig.top_p &&
             config.top_k == newConfig.top_k) ||
-            !newConfig.temperature ||
-            !newConfig.top_p ||
             !newConfig.top_k ||
             isLoading}
         on:click={() => saveConfig()}
     >
         {#if isLoading}
-            <LoaderCircle size={14} class={'spin'} /> Loading...
+            <span class="loading loading-spinner loading-xs"></span> Loading...
         {:else}
             <Check size={14} /> Save
         {/if}

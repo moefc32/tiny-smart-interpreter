@@ -15,7 +15,7 @@ export default {
         const chat = genAI.chats.create({
             model: VITE_GEMINI_MODEL,
             history: chatHistory,
-            config: config.get(),
+            config: await config.get(),
         });
 
         const response = await chat.sendMessage({

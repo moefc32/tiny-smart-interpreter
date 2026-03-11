@@ -1,5 +1,6 @@
 <script>
-    import { LoaderCircle, Send, Menu, X } from 'lucide-svelte';
+    import { Send, Menu, X } from 'lucide-svelte';
+    import { marked } from 'marked';
     import { toast } from 'svoast';
     import ky from 'ky';
     import datePrettier from '$lib/datePrettier.js';
@@ -92,11 +93,11 @@
                         {chat.role === 'user' ? 'You' : 'AI Assistant'}
                     </div>
                     <div
-                        class="chat-bubble {chat.role === 'user'
+                        class="chat-bubble flex flex-col gap-3 {chat.role === 'user'
                             ? 'chat-bubble-accent'
                             : 'chat-bubble-info'}"
                     >
-                        {chat.text}
+                        {@html marked(chat.text)}
                     </div>
                     <time class="chat-footer opacity-75">
                         {datePrettier(chat.timestamp, {
@@ -134,7 +135,7 @@
             on:click={() => sendChat()}
         >
             {#if isLoading}
-                <LoaderCircle size={14} class={'spin'} /> Loading...
+                <span class="loading loading-spinner loading-xs"></span> Loading...
             {:else}
                 <Send size={14} /> Send
             {/if}
