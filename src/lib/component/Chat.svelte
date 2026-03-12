@@ -1,7 +1,7 @@
 <script>
     import { Send, Menu, X } from 'lucide-svelte';
+    import { toast } from 'svelte-sonner';
     import { marked } from 'marked';
-    import { toast } from 'svoast';
     import ky from 'ky';
     import datePrettier from '$lib/datePrettier.js';
 

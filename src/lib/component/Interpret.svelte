@@ -1,7 +1,7 @@
 <script>
     import { tick } from 'svelte';
     import { Upload, Check } from 'lucide-svelte';
-    import { toast } from 'svoast';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
     import isMimeAllowed from '$lib/isMimeAllowed';
 

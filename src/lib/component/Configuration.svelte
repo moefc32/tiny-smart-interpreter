@@ -1,6 +1,6 @@
 <script>
     import { Check } from 'lucide-svelte';
-    import { toast } from 'svoast';
+    import { toast } from 'svelte-sonner';
     import ky from 'ky';
     import trimText from '$lib/trimText';
 
