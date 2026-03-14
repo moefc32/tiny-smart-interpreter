@@ -1,18 +1,18 @@
 import { asc } from 'drizzle-orm';
 import { db } from '../drizzle';
-import { history } from '../schema';
+import { Histories } from '../schema';
 
 export default {
     getData: async () => {
         try {
             const result = await db
                 .select({
-                    role: history.role,
-                    text: history.text,
-                    timestamp: history.timestamp,
+                    role: Histories.role,
+                    text: Histories.text,
+                    timestamp: Histories.timestamp,
                 })
-                .from(history)
-                .orderBy(asc(history.timestamp));
+                .from(Histories)
+                .orderBy(asc(Histories.timestamp));
 
             return result;
         } catch (e) {
@@ -23,7 +23,7 @@ export default {
     createData: async (data) => {
         try {
             const result = await db
-                .insert(history)
+                .insert(Histories)
                 .values({
                     role: data.role,
                     text: data.text,
@@ -46,7 +46,7 @@ export default {
     },
     deleteData: async () => {
         try {
-            const result = await db.delete(history);
+            const result = await db.delete(Histories);
             return result;
         } catch (e) {
             console.error(e);

@@ -1,7 +1,7 @@
 import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 
-export const history = sqliteTable('history', {
+export const Histories = sqliteTable('Histories', {
 	id: text('id')
 		.primaryKey()
 		.default(sql`lower(hex(randomblob(16)))`),
@@ -11,7 +11,7 @@ export const history = sqliteTable('history', {
 	timestamp: integer('timestamp').notNull(),
 });
 
-export const config = sqliteTable('config', {
+export const Configs = sqliteTable('Configs', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	system_instruction: text('system_instruction'),
 	temperature: real('temperature').notNull(),

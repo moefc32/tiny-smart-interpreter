@@ -14,7 +14,7 @@ function dedent(str) {
 
 export default async function setSchema() {
     await db.run(sql`
-        CREATE TABLE IF NOT EXISTS history (
+        CREATE TABLE IF NOT EXISTS Histories (
             id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
             role TEXT NOT NULL,
             text TEXT NOT NULL,
@@ -23,7 +23,7 @@ export default async function setSchema() {
     `);
 
     await db.run(sql`
-        CREATE TABLE IF NOT EXISTS config (
+        CREATE TABLE IF NOT EXISTS Configs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             system_instruction TEXT,
             temperature REAL NOT NULL,
@@ -33,7 +33,7 @@ export default async function setSchema() {
     `);
 
     await db.run(sql`
-        INSERT INTO config (system_instruction, temperature, top_p, top_k)
+        INSERT INTO Configs (system_instruction, temperature, top_p, top_k)
         SELECT
             ${dedent(`
                 You are a personal AI assistant.
@@ -48,6 +48,6 @@ export default async function setSchema() {
             0.5,
             0.8,
             40
-        WHERE NOT EXISTS (SELECT 1 FROM config)
+        WHERE NOT EXISTS (SELECT 1 FROM Configs)
     `);
 }

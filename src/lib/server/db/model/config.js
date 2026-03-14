@@ -1,21 +1,21 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../drizzle';
-import { config } from '../schema';
+import { Configs } from '../schema';
 
 let cachedConfig;
 
 async function loadFromDB() {
     const rows = await db
         .select({
-            system_instruction: config.system_instruction,
-            temperature: config.temperature,
-            top_p: config.top_p,
-            top_k: config.top_k,
+            system_instruction: Configs.system_instruction,
+            temperature: Configs.temperature,
+            top_p: Configs.top_p,
+            top_k: Configs.top_k,
         })
-        .from(config)
+        .from(Configs)
         .limit(1);
 
-    if (!rows[0]) throw new Error('AI config not found in DB');
+    if (!rows[0]) throw new Error('AI configurations not found in DB');
 
     cachedConfig = {
         system_instruction: rows[0].system_instruction,
@@ -41,14 +41,14 @@ export default {
         };
 
         await db
-            .update(config)
+            .update(Configs)
             .set({
                 system_instruction: updatedConfig.system_instruction,
                 temperature: updatedConfig.temperature,
                 top_p: updatedConfig.top_p,
                 top_k: updatedConfig.top_k,
             })
-            .where(eq(config.id, 1));
+            .where(eq(Configs.id, 1));
 
         cachedConfig = {
             ...cachedConfig,
