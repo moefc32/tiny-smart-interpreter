@@ -104,7 +104,7 @@
     >
         <div class="card p-6 bg-white border-1 border-gray-200 w-full">
             <div
-                class="flex flex-col items-center gap-1 pt-[110px] px-6 bg-[url(/favicon.svg)] bg-no-repeat bg-top bg-[length:100px] w-full opacity-75"
+                class="flex flex-col items-center gap-1 pt-28 px-6 bg-[url(/favicon.svg)] bg-no-repeat bg-top bg-[length:100px] w-full opacity-75"
             >
                 <span class="text-lg text-center font-semibold">
                     {import.meta.env.VITE_APP_NAME}
@@ -127,7 +127,7 @@
         </fieldset>
         <fieldset class="fieldset">
             <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3">
-                <legend class="fieldset-legend important min-w-[80px]">
+                <legend class="fieldset-legend important sm:min-w-20">
                     Temperature
                 </legend>
                 <input
@@ -138,28 +138,28 @@
                     on:blur={formatTemperature}
                     bind:value={newConfig.temperature}
                 />
-                <p class="label min-w-[250px]">Allowed range: 0.0-2.0</p>
+                <p class="label sm:min-w-80">Allowed range: 0.0-2.0</p>
             </div>
         </fieldset>
         <fieldset class="fieldset">
             <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3">
-                <legend class="fieldset-legend important min-w-[80px]">
+                <legend class="fieldset-legend important sm:min-w-20">
                     Top-P
                 </legend>
                 <input
                     type="text"
-                    class="input w-full"
+                    class="input w-full!"
                     disabled={isLoading}
                     on:input={sanitizeRealInput}
                     on:blur={formatTopP}
                     bind:value={newConfig.top_p}
                 />
-                <p class="label min-w-[250px]">Allowed range: 0.0-1.0</p>
+                <p class="label sm:min-w-80">Allowed range: 0.0-1.0</p>
             </div>
         </fieldset>
         <fieldset class="fieldset">
             <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3">
-                <legend class="fieldset-legend important min-w-[80px]">
+                <legend class="fieldset-legend important sm:min-w-20">
                     Top-K
                 </legend>
                 <input
@@ -170,7 +170,7 @@
                     on:blur={formatTopK}
                     bind:value={newConfig.top_k}
                 />
-                <p class="label min-w-[250px]">Allowed range: 1-100</p>
+                <p class="label sm:min-w-80">Allowed range: 1-100</p>
             </div>
         </fieldset>
     </div>
