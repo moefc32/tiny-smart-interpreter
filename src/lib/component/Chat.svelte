@@ -73,10 +73,10 @@
     >
         {#if !chatHistory.length}
             <div
-                class="flex flex-1 justify-center items-center mx-auto text-gray-600 text-center max-w-[400px]"
+                class="flex flex-1 justify-center items-center mx-auto text-gray-600 text-center max-w-100"
             >
                 <div
-                    class="pt-[110px] px-6 bg-[url(/chat.svg)] bg-no-repeat bg-top bg-[length:100px] w-full opacity-75"
+                    class="pt-28 px-6 bg-[url(/chat.svg)] bg-no-repeat bg-top bg-[length:100px] w-full opacity-75"
                 >
                     No conversations yet, send a message to begin interacting
                     with your AI assistant
@@ -93,7 +93,8 @@
                         {chat.role === 'user' ? 'You' : 'AI Assistant'}
                     </div>
                     <div
-                        class="chat-bubble flex flex-col gap-3 {chat.role === 'user'
+                        class="chat-bubble flex flex-col gap-3 {chat.role ===
+                        'user'
                             ? 'chat-bubble-accent'
                             : 'chat-bubble-info'}"
                     >

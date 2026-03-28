@@ -71,7 +71,7 @@
 <main class="flex flex-1 flex-col gap-3 p-6 w-full max-w-xl">
     <section class="flex gap-2 items-center w-full">
         <button
-            class="bg-[url(/favicon.svg)] bg-no-repeat bg-contain w-[28px] aspect-square cursor-pointer"
+            class="bg-[url(/favicon.svg)] bg-no-repeat bg-contain w-7 aspect-square cursor-pointer"
             on:click={() => tabNavigate(0)}
         ></button>
         <div role="tablist" class="tabs tabs-lift">

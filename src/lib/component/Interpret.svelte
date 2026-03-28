@@ -99,10 +99,10 @@
                 bind:this={fileInput}
             />
             <div
-                class="flex flex-1 justify-center items-center mx-auto text-gray-600 text-center max-w-[400px]"
+                class="flex flex-1 justify-center items-center mx-auto text-gray-600 text-center max-w-100"
             >
                 <div
-                    class="mt-[95px] pt-[110px] px-6 bg-[length:100px]! w-full opacity-75"
+                    class="mt-[95px] pt-28 px-6 bg-[length:100px]! w-full opacity-75"
                     style={`background: ${attachment ? 'url(/file.svg)' : 'url(/upload.svg)'} center top no-repeat;`}
                 >
                     <span class="block pb-6 truncate" title={attachment?.name}>
