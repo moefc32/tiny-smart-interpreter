@@ -95,20 +95,20 @@ export async function POST({ request }) {
 
 export async function PUT({ request }) {
     let {
-        system_instruction,
+        systemInstruction,
         temperature,
-        top_p,
-        top_k,
+        topP,
+        topK,
     } = await request.json() || {};
 
     if (temperature !== undefined) temperature = Number(temperature);
-    if (top_p !== undefined) top_p = Number(top_p);
-    if (top_k !== undefined) top_k = Number(top_k);
+    if (topP !== undefined) topP = Number(topP);
+    if (topK !== undefined) topK = Number(topK);
 
     if (
         (temperature !== undefined && typeof temperature !== 'number') ||
-        (top_p !== undefined && typeof top_p !== 'number') ||
-        (top_k !== undefined && !Number.isInteger(top_k))
+        (topP !== undefined && typeof topP !== 'number') ||
+        (topK !== undefined && !Number.isInteger(topK))
     ) {
         return json({
             application: VITE_APP_NAME,
@@ -120,12 +120,12 @@ export async function PUT({ request }) {
 
     try {
         const result = await modelConfig.set({
-            system_instruction: system_instruction !== undefined
-                ? trimText(system_instruction)
+            systemInstruction: systemInstruction !== undefined
+                ? trimText(systemInstruction)
                 : undefined,
             temperature,
-            top_p,
-            top_k,
+            topP,
+            topK,
         });
 
         return json({
