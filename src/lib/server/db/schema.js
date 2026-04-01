@@ -11,8 +11,8 @@ export const Histories = sqliteTable('Histories', {
 
 export const Configs = sqliteTable('Configs', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
-	system_instruction: text('system_instruction'),
+	systemInstruction: text('system_instruction'),
 	temperature: real('temperature').notNull(),
-	top_p: real('top_p').notNull(),
-	top_k: integer('top_k').notNull(),
+	topP: real('top_p').notNull(),
+	topK: integer('top_k').notNull(),
 });

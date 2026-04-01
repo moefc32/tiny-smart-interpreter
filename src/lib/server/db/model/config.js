@@ -7,10 +7,10 @@ let cachedConfig;
 async function loadFromDB() {
     const rows = await db
         .select({
-            system_instruction: Configs.system_instruction,
+            systemInstruction: Configs.systemInstruction,
             temperature: Configs.temperature,
-            top_p: Configs.top_p,
-            top_k: Configs.top_k,
+            topP: Configs.topP,
+            topK: Configs.topK,
         })
         .from(Configs)
         .limit(1);
@@ -18,10 +18,10 @@ async function loadFromDB() {
     if (!rows[0]) throw new Error('AI configurations not found in DB');
 
     cachedConfig = {
-        system_instruction: rows[0].system_instruction,
+        systemInstruction: rows[0].systemInstruction,
         temperature: rows[0].temperature,
-        top_p: rows[0].top_p,
-        top_k: rows[0].top_k,
+        topP: rows[0].topP,
+        topK: rows[0].topK,
     };
 
     return cachedConfig;
@@ -34,19 +34,19 @@ export default {
     },
     set: async (newConfig) => {
         const updatedConfig = {
-            system_instruction: newConfig.system_instruction,
+            systemInstruction: newConfig.systemInstruction,
             temperature: newConfig.temperature ?? cachedConfig.temperature,
-            top_p: newConfig.top_p ?? cachedConfig.top_p,
-            top_k: newConfig.top_k ?? cachedConfig.top_k,
+            topP: newConfig.topP ?? cachedConfig.topP,
+            topK: newConfig.topK ?? cachedConfig.topK,
         };
 
         await db
             .update(Configs)
             .set({
-                system_instruction: updatedConfig.system_instruction,
+                systemInstruction: updatedConfig.systemInstruction,
                 temperature: updatedConfig.temperature,
-                top_p: updatedConfig.top_p,
-                top_k: updatedConfig.top_k,
+                topP: updatedConfig.topP,
+                topK: updatedConfig.topK,
             })
             .where(eq(Configs.id, 1));
 

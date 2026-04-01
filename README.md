@@ -10,7 +10,7 @@
 <img src="https://img.shields.io/badge/Module-ECMAScript-yellow?style=flat-square" height="24" />
 </div>
 
-![Preview](https://github.com/user-attachments/assets/6c888094-cce8-483d-8932-10918a2ee71e)
+![Preview](https://github.com/user-attachments/assets/086d1ecc-5526-4b64-bdd6-108cb2006f6b)
 
 ## Features
 - Chat interaction with an AI assistant using Google Gemini

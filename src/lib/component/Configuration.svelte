@@ -50,12 +50,12 @@
         const value = event.target.value;
 
         if (value === '') {
-            newConfig.top_p = config.top_p;
+            newConfig.topP = config.topP;
         } else {
             let num = parseFloat(value);
             if (num < 0) num = 0;
             if (num > 1) num = 1;
-            newConfig.top_p = parseFloat(num.toFixed(1));
+            newConfig.topP = parseFloat(num.toFixed(1));
         }
     }
 
@@ -63,17 +63,17 @@
         const value = event.target.value;
 
         if (value === '') {
-            newConfig.top_k = config.top_k;
+            newConfig.topK = config.topK;
         } else {
             let num = parseFloat(value);
             if (num < 1) num = 1;
             if (num > 100) num = 100;
-            newConfig.top_k = parseInt(num);
+            newConfig.topK = parseInt(num);
         }
     }
 
     async function saveConfig() {
-        if (!newConfig.top_k) return;
+        if (!newConfig.topK) return;
         isLoading = true;
 
         try {
@@ -82,7 +82,7 @@
                     json: {
                         ...newConfig,
                         temperature: newConfig.temperature || 0,
-                        top_p: newConfig.top_p || 0,
+                        topP: newConfig.topP || 0,
                     },
                 })
                 .json();
@@ -122,7 +122,7 @@
                 rows="3"
                 placeholder="Add an AI system instruction (optional)"
                 disabled={isLoading}
-                bind:value={newConfig.system_instruction}
+                bind:value={newConfig.systemInstruction}
             ></textarea>
         </fieldset>
         <fieldset class="fieldset">
@@ -152,7 +152,7 @@
                     disabled={isLoading}
                     on:input={sanitizeRealInput}
                     on:blur={formatTopP}
-                    bind:value={newConfig.top_p}
+                    bind:value={newConfig.topP}
                 />
                 <p class="label sm:min-w-80">Allowed range: 0.0-1.0</p>
             </div>
@@ -168,7 +168,7 @@
                     disabled={isLoading}
                     on:input={sanitizeIntegerInput}
                     on:blur={formatTopK}
-                    bind:value={newConfig.top_k}
+                    bind:value={newConfig.topK}
                 />
                 <p class="label sm:min-w-80">Allowed range: 1-100</p>
             </div>
@@ -176,12 +176,12 @@
     </div>
     <button
         class="btn btn-primary shadow"
-        disabled={(config.system_instruction ==
-            trimText(newConfig.system_instruction) &&
+        disabled={(config.systemInstruction ==
+            trimText(newConfig.systemInstruction) &&
             config.temperature == newConfig.temperature &&
-            config.top_p == newConfig.top_p &&
-            config.top_k == newConfig.top_k) ||
-            !newConfig.top_k ||
+            config.topP == newConfig.topP &&
+            config.topK == newConfig.topK) ||
+            !newConfig.topK ||
             isLoading}
         on:click={() => saveConfig()}
     >
