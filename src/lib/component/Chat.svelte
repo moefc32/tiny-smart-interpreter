@@ -34,7 +34,7 @@
                 .post('/api/chat', {
                     json: {
                         prompt,
-                        timestamp: Date.now(),
+                        timestamp: new Date(),
                     },
                     timeout: 60 * 1000,
                 })

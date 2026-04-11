@@ -24,7 +24,7 @@ export default async function setSchema() {
 
     await db.run(sql`
         CREATE TABLE IF NOT EXISTS Configs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
             system_instruction TEXT,
             temperature REAL NOT NULL,
             top_p REAL NOT NULL,

@@ -43,7 +43,7 @@ export async function POST({ request }) {
             await modelHistory.createData({
                 role: 'model',
                 text: cached,
-                timestamp: Date.now(),
+                timestamp: new Date(),
             });
 
             return json({
@@ -69,7 +69,7 @@ export async function POST({ request }) {
         await modelHistory.createData({
             role: 'model',
             text: result,
-            timestamp: Date.now(),
+            timestamp: new Date(),
         });
 
         if (!formattedHistory.length) {

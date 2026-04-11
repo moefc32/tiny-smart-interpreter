@@ -6,13 +6,14 @@ export const Histories = sqliteTable('Histories', {
 		.$defaultFn(() => sql`lower(hex(randomblob(16)))`),
 	role: text('role').notNull(),
 	text: text('text').notNull(),
-	timestamp: integer('timestamp').notNull(),
+	timestamp: integer('timestamp', { mode: 'timestamp_ms' }).notNull(),
 });
 
 export const Configs = sqliteTable('Configs', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
+	id: text('id').primaryKey()
+		.$defaultFn(() => sql`lower(hex(randomblob(16)))`),
 	systemInstruction: text('system_instruction'),
 	temperature: real('temperature').notNull(),
 	topP: real('top_p').notNull(),
-	topK: integer('top_k').notNull(),
+	topK: integer('top_k', { mode: 'number' }).notNull(),
 });
