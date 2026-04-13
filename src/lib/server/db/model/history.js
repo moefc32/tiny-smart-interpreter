@@ -22,7 +22,7 @@ export default {
     },
     createData: async (data) => {
         try {
-            const result = await db
+            const [result] = await db
                 .insert(Histories)
                 .values({
                     role: data.role,
@@ -31,14 +31,7 @@ export default {
                 })
                 .returning();
 
-            return {
-                column: {
-                    role: data.role,
-                    text: data.text,
-                    timestamp: data.timestamp,
-                },
-                ...result,
-            };
+            return result;
         } catch (e) {
             console.error(e);
             throw new Error('Error when creating data!');
