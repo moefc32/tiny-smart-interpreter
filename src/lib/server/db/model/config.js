@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../drizzle';
 import { Configs } from '../schema';
+import db from '../drizzle';
 
 let cachedConfig;
 

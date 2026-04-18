@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { db } from '../db/drizzle';
+import db from './drizzle';
 
 function dedent(str) {
     const lines = str.replace(/^\n/, '').split('\n');

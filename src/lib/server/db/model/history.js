@@ -1,6 +1,6 @@
 import { asc } from 'drizzle-orm';
-import { db } from '../drizzle';
 import { Histories } from '../schema';
+import db from '../drizzle';
 
 export default {
     getData: async () => {

@@ -11,27 +11,28 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^5.5.4",
-		"@sveltejs/kit": "^2.57.1",
+		"@sveltejs/kit": "^2.59.1",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
-		"@tailwindcss/vite": "^4.2.2",
+		"@tailwindcss/vite": "^4.2.4",
 		"daisyui": "^5.5.19",
-		"svelte": "^5.55.4",
-		"tailwindcss": "^4.2.2",
+		"svelte": "^5.55.5",
+		"tailwindcss": "^4.2.4",
 		"vite": "^7.3.2"
 	},
 	"dependencies": {
 		"@fontsource-variable/plus-jakarta-sans": "^5.2.8",
-		"@google/genai": "^1.50.1",
+		"@google/genai": "^1.52.0",
 		"better-sqlite3": "^12.9.0",
 		"dotenv": "^16.6.1",
 		"drizzle-orm": "^0.45.2",
 		"ky": "^1.14.3",
 		"lucide-svelte": "^0.563.0",
 		"marked": "^17.0.6",
-		"svelte-sonner": "^1.1.0"
+		"svelte-sonner": "^1.1.1"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
+			"@google/genai",
 			"@tailwindcss/oxide",
 			"better-sqlite3",
 			"esbuild",
