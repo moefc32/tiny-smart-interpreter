@@ -19,7 +19,7 @@ export default async function setSchema() {
             role TEXT NOT NULL,
             text TEXT NOT NULL,
             timestamp INTEGER NOT NULL
-        )
+        );
     `);
 
     await db.run(sql`
@@ -29,11 +29,11 @@ export default async function setSchema() {
             temperature REAL NOT NULL,
             top_p REAL NOT NULL,
             top_k INTEGER NOT NULL
-        )
+        );
     `);
 
     await db.run(sql`
-        INSERT INTO Configs (system_instruction, temperature, top_p, top_k)
+        INSERT INTO Configs (system_instruction, temperature, top_p, top_k);
         SELECT
             ${dedent(`
                 You are a personal AI assistant.
@@ -48,6 +48,6 @@ export default async function setSchema() {
             0.5,
             0.8,
             40
-        WHERE NOT EXISTS (SELECT 1 FROM Configs)
+        WHERE NOT EXISTS (SELECT 1 FROM Configs);
     `);
 }

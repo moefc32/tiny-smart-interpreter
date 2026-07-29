@@ -2,7 +2,7 @@
     import { onMount, tick } from 'svelte';
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
-    import { MessageSquare, File, X, Settings } from 'lucide-svelte';
+    import { MessageSquare, File, X, Settings } from '@lucide/svelte';
 
     import Chat from '$lib/component/Chat.svelte';
     import Interpret from '$lib/component/Interpret.svelte';

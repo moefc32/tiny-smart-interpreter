@@ -1,5 +1,5 @@
 <script>
-    import { Send, Menu, X } from 'lucide-svelte';
+    import { Send, Menu, X } from '@lucide/svelte';
     import { toast } from 'svelte-sonner';
     import { marked } from 'marked';
     import ky from 'ky';
